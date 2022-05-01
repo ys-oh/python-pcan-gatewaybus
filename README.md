@@ -20,7 +20,7 @@ in Route Configuration Page, add Routing IP Addresses both side(CAN->Ethernet, E
 ```shell
 
 # install from PyPI
-$ pip3 install python-pcan-gatewaybus
+$ pip3 install pcan-gatewaybus
 
 or 
 
