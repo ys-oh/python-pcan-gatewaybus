@@ -8,7 +8,7 @@ Target Device :
 
 ## PCAN-Ethernet Gateway Configuration
 
-in [user manual](https://www.peak-system.com/produktcd/Pdf/English/PCAN-Ethernet-Gateway-FD-DR_UserMan_eng.pdf), custom gateway procol is presented.
+in [user manual](https://www.peak-system.com/produktcd/Pdf/English/PCAN-Ethernet-Gateway-FD-DR_UserMan_eng.pdf), custom gateway protocol is presented.
 
 in Route Configuration Page, add Routing IP Addresses both side(CAN->Ethernet, Ethernet->CAN)
 
