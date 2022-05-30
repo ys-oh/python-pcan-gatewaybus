@@ -348,35 +348,29 @@ class CANGateway(object):
         if self.receive_socket is None:
             return None
 
-        started = time.time()
-        timeout = timeout if timeout is not None else 0
-        time_left = timeout
+        if not self.rx_queue.empty():
+            return self.rx_queue.get_nowait()
 
-        while time_left >= 0:
+        ready = self.__wait_for_read(timeout)
+        if ready is None:
+            return None
 
-            if len(self._buffer) < 2:
-                ready = self.__wait_for_read(time_left)
-                if ready is None:
-                    # timeout
-                    return None
+        buffer = self.__receive_socket_recv(1500)
 
-                self._buffer += self.__receive_socket_recv(128)
+        while len(buffer) >= CANMessage.FRAME_HEADER_LENGTH:
+            frame_length = struct.unpack('!H', buffer[0:2])[0]
+            if frame_length > len(buffer):
                 break
 
-            time_left = timeout - (time.time() - started)
+            try:
+                self.rx_queue.put(CANMessage(binary_data=buffer[0:frame_length]))
+                buffer = buffer[frame_length:]
+            except:
+                break
 
-        while len(self._buffer) > 2:
-            frame_length_data = struct.unpack('!H', self._buffer[0:2])
-            frame_length = frame_length_data[0]
+        if not self.rx_queue.empty():
+            return self.rx_queue.get_nowait()
 
-            if frame_length <= len(self._buffer):
-                frame_raw = self._buffer[0:frame_length]
-                try:
-                    msg = CANMessage(binary_data=frame_raw)
-                    self._buffer = self._buffer[frame_length:]
-                    return msg
-                except:
-                    self._buffer = self._buffer[2:]
         return None
 
     def __send_msg(self, data, timeout = None):
