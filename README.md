@@ -1,5 +1,12 @@
 # PCAN Gateway Plugin Packages
 
+[![PyPI Python Version][pypi-versions-badge]][pypi]
+[![PyPI version][pypi-badge]][pypi]
+
+[pypi-versions-badge]: https://img.shields.io/pypi/pyversions/pcan-gatewaybus
+[pypi-badge]: https://badge.fury.io/py/pcan-gatewaybus.svg
+[pypi]: https://pypi.org/project/pcan-gatewaybus/
+
 
 Target Device :
  [PCAN-Ethernet Gateway](https://www.peak-system.com/PCAN-Ethernet-Gateway-FD-DR.538.0.html?&L=1) 
