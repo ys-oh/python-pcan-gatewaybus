@@ -157,7 +157,7 @@ class CANMessage(object):
     def __get_canid(self):
         arbitration_id = self.can_id & 0x3FFFFFFF
         rtr = (1 << 29) if self.remote and not self.fd else 0
-        extid = (2 << 29) if self.extend_id else 0
+        extid = (1 << 30) if self.extend_id else 0
         return arbitration_id | rtr | extid
 
     def __get_channel_idx(self):
