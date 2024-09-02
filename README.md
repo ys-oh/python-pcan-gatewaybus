@@ -17,25 +17,30 @@ Target Device :
 
 in [user manual](https://www.peak-system.com/produktcd/Pdf/English/PCAN-Ethernet-Gateway-FD-DR_UserMan_eng.pdf), custom gateway protocol is presented.
 
-in Route Configuration Page, add Routing IP Addresses both side(CAN->Ethernet, Ethernet->CAN)
+### Handshake Off
+you must **disable handshake** for custom protocol integration.
 
+- enter "Expert Mode" in admin page
+- turn Handshake Checkbox off
 
-<br>
+### Router Configuration
+in Route Configuration Page, add Routing IP Addresses both side
+- CAN->Ethernet
+- Ethernet->CAN
+
 
 ## Install Plugin Package
 
+install from PyPI
 ```shell
-
-# install from PyPI
 $ pip3 install pcan-gatewaybus
+```
 
-or 
-
-# local installation
+local installation
+```shell
 $ git clone https://github.com/ys-oh/python-can-gatewaybus
 $ cd python-can-gatewaybus
 $ pip3 install . 
-
 ```
 
 
