@@ -237,6 +237,7 @@ class CANGateway(object):
         self.thread = None
         self.callback = None
         self._buffer = b''
+        self.receive_own_messages = receive_own_messages
 
     def __del__(self):
         self.close()
@@ -377,7 +378,7 @@ class CANGateway(object):
 
         self.reconnect_transmit_client()
         if self.transmit_socket is None:
-            return
+            return -1
 
         started = time.time()
         # If no timeout is given, poll for availability
@@ -397,16 +398,27 @@ class CANGateway(object):
                 sent = 0
 
             if sent == len(data):
-                return
+                return 0
 
 
             # Not all data were sent, try again with remaining data
             data = data[sent:]
             time_left = timeout - (time.time() - started)
+        return -2
 
     def send_msg(self, msg : CANMessage, timeout = None):
         # self.tx_queue.put(msg, timeout)
-        self.__send_msg(msg.get_binary(), timeout=timeout)
+        res = self.__send_msg(msg.get_binary(), timeout=timeout)
+
+        if res == 0:
+            if msg.timestamp is None:
+                msg.timestamp = time.time() - TIME_REF
+                
+            if self.receive_own_messages:
+                try:
+                    self.rx_queue.put(msg)
+                except self.rx_queue.Full:
+                    logger.warning('RX buffer full sent message lost')
 
     def send_can(self, canid, candata, channel = 0):
         self.send_msg(CANMessage(canid, candata, channel=channel, fd=False))

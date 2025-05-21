@@ -25,6 +25,7 @@ class GatewayBus(BusABC):
         self,
         channel="localhost:3999,localhost:3999",
         state=BusState.ACTIVE,
+        receive_own_messages: bool = False,
         *args,
         **kwargs
     ):
@@ -32,6 +33,7 @@ class GatewayBus(BusABC):
 
         route_tx = kwargs.get("route_tx", None)
         route_rx = kwargs.get("route_rx", None)
+        self.receive_own_messages = receive_own_messages
 
         # example channel format
         # host ip : 192.168.1.10
@@ -49,7 +51,7 @@ class GatewayBus(BusABC):
         self.fd = kwargs.get("fd", False)
         self._gateway_channel = 0 # channel is not used
 
-        self._gateway = CANGateway(self.route_tx_addr, self.route_rx_addr)
+        self._gateway = CANGateway(self.route_tx_addr, self.route_rx_addr, self.receive_own_messages)
         self._gateway.start()
         self.state = state
 
